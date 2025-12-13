@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  CardGameMainView.swift
 //  CardMatchingGame
 //
 //  Created by Jalal Hemidach on 12/8/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct CardGameMainView: View {
     var body: some View {
         VStack {
             CardView()
@@ -30,5 +30,5 @@ struct CardView: View {
 }
 
 #Preview {
-    ContentView()
+    CardGameMainView()
 }
