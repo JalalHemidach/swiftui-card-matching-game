@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct CardMatchingGameApp: App {
+    private var cardGameVM = CardGameVM()
+    
     var body: some Scene {
         WindowGroup {
-            CardGameMainView()
+            CardGameMainView(cardGameVM: cardGameVM)
         }
     }
 }
