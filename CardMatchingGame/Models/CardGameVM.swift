@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 @Observable class CardGameVM {
-    static var emojis = ["🧪","🔭", "🥊","🔬", "💾","🧬","⛔️","🔥","🚫","🤬","🥶", "🤮"]
+    static var emojis = ["🧪","🔭", "🥊","🔬", "🦖","🧬","🏂","🔥","🦕","🤬","🥶", "🤮"]
     private static func createCardModel() -> CardModel<String> {
         return CardModel(pairOfCardsCount: emojis.count) { pairIndex in
             if emojis.indices.contains(pairIndex) {
@@ -23,18 +23,9 @@ import Combine
     var cards: Array<CardModel<String>.Card> {
         return cardModel.cards
     }
-
     
-    func offsetPairOfCardsCount(by offset: Int) {
-        cardModel.pairOfCardsCount += offset
-    }
-    
-    var pairOfCardsCount: Int {
-        return cardModel.pairOfCardsCount
-    }
-    
-    func flip(card: inout CardModel<String>.Card) {
-        cardModel.flip(card: &card)
+    func selectCard(card: CardModel<String>.Card) {
+        cardModel.selectCard(card: card)
     }
     
     func shuffle() {

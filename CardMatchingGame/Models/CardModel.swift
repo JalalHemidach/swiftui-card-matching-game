@@ -5,33 +5,57 @@
 //  Created by Jalal Hemidach on 12/11/25.
 //
 
-struct CardModel<CardContent> {
+struct CardModel<CardContent: Equatable> {
     private(set) var cards: Array<Card>
-    var pairOfCardsCount: Int = 1
-    var isFaceUp: Bool = true
     
     init(pairOfCardsCount: Int, content: (Int) -> CardContent) {
         cards = []
         for pairIndex in 0..<max(2, pairOfCardsCount) {
             let content = content(pairIndex)
-            cards.append(Card(id: "\(pairIndex * 2)", content: content))
-            cards.append(Card(id: "\(pairIndex * 2 + 1)", content: content))
+            cards.append(Card(id: "\(pairIndex + 1)a", content: content))
+            cards.append(Card(id: "\(pairIndex + 1)b", content: content))
         }
     }
     
-    mutating func flip(card: inout Card) {
-        isFaceUp.toggle()
-        card.isFaceUp.toggle()
+    private var indexOfOneAndOnlyFaceUpCard: Int?
+    
+    mutating func selectCard(card: Card) {
+        guard let selectedCardIndex = cards.firstIndex(where: { $0.id == card.id }) else { return }
+        
+        //Check if the selected card is not flipped face up and not matched
+        if !card.isFaceUp && !card.isMatched {
+            //Check if we have a flipped up a card previously and this is the second one to be so
+            if let potentialMatchIndex = indexOfOneAndOnlyFaceUpCard {
+                //check if the two cards are a match
+                if cards[selectedCardIndex].content == cards[potentialMatchIndex].content {
+                    //We have a match! We set both cards to matched
+                    cards[selectedCardIndex].isMatched = true
+                    cards[potentialMatchIndex].isMatched = true
+                }
+//                Freeing the variable indexOfOneAndOnlyFaceUpCard
+                indexOfOneAndOnlyFaceUpCard = nil
+                //Deal somehow with the matched cards UI
+                //FIXME: - Deal with the matched cards
+            } else {
+                //Flipping all the cards face down
+                for index in cards.indices {
+                    cards[index].isFaceUp = false
+                }
+                //Storing the indexOfOneAndOnlyFaceUpCard
+                indexOfOneAndOnlyFaceUpCard = selectedCardIndex
+            }
+            //Flipping the selected card face up
+            cards[selectedCardIndex].isFaceUp = true
+        }
     }
     
     mutating func shuffle() {
         cards.shuffle()
     }
     
-    
-    struct Card: Identifiable {
+    struct Card: Identifiable, Equatable {
         var id: String
-        var isFaceUp: Bool = true
+        var isFaceUp: Bool = false
         var isMatched: Bool = false
         var content: CardContent
     }
