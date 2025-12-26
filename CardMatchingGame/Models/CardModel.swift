@@ -17,7 +17,31 @@ struct CardModel<CardContent: Equatable> {
         }
     }
     
-    private var indexOfOneAndOnlyFaceUpCard: Int?
+    private var indexOfOneAndOnlyFaceUpCard: Int? {
+        get {
+            var faceUpIndices  = [Int]()
+            for index in cards.indices {
+                if cards[index].isFaceUp {
+                    faceUpIndices.append(index)
+                }
+            }
+            if faceUpIndices.count == 1 {
+                return faceUpIndices.first
+            } else {
+                return nil
+            }
+        }
+        set {
+            for index in cards.indices {
+                if index == newValue {
+                    cards[index].isFaceUp = true
+                } else {
+                    //Flipping all the cards face down
+                    cards[index].isFaceUp = false
+                }
+            }
+        }
+    }
     
     mutating func selectCard(card: Card) {
         guard let selectedCardIndex = cards.firstIndex(where: { $0.id == card.id }) else { return }
@@ -32,15 +56,8 @@ struct CardModel<CardContent: Equatable> {
                     cards[selectedCardIndex].isMatched = true
                     cards[potentialMatchIndex].isMatched = true
                 }
-//                Freeing the variable indexOfOneAndOnlyFaceUpCard
-                indexOfOneAndOnlyFaceUpCard = nil
-                //Deal somehow with the matched cards UI
                 //FIXME: - Deal with the matched cards
             } else {
-                //Flipping all the cards face down
-                for index in cards.indices {
-                    cards[index].isFaceUp = false
-                }
                 //Storing the indexOfOneAndOnlyFaceUpCard
                 indexOfOneAndOnlyFaceUpCard = selectedCardIndex
             }
