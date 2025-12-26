@@ -19,27 +19,11 @@ struct CardModel<CardContent: Equatable> {
     
     private var indexOfOneAndOnlyFaceUpCard: Int? {
         get {
-            var faceUpIndices  = [Int]()
-            for index in cards.indices {
-                if cards[index].isFaceUp {
-                    faceUpIndices.append(index)
-                }
-            }
-            if faceUpIndices.count == 1 {
-                return faceUpIndices.first
-            } else {
-                return nil
-            }
+            let faceUpIndices  = cards.indices.filter { index in cards[index].isFaceUp }
+            return faceUpIndices.count == 1 ? faceUpIndices.first : nil
         }
         set {
-            for index in cards.indices {
-                if index == newValue {
-                    cards[index].isFaceUp = true
-                } else {
-                    //Flipping all the cards face down
-                    cards[index].isFaceUp = false
-                }
-            }
+            cards.indices.forEach {cards[$0].isFaceUp = (newValue == $0) }
         }
     }
     
