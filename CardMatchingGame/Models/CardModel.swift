@@ -18,12 +18,8 @@ struct CardModel<CardContent: Equatable> {
     }
     
     private var indexOfOneAndOnlyFaceUpCard: Int? {
-        get {
-            return cards.indices.filter { index in cards[index].isFaceUp }.only
-        }
-        set {
-            cards.indices.forEach {cards[$0].isFaceUp = (newValue == $0) }
-        }
+        get { return cards.indices.filter { index in cards[index].isFaceUp }.only }
+        set { cards.indices.forEach {cards[$0].isFaceUp = (newValue == $0) } }
     }
     
     mutating func selectCard(card: Card) {
