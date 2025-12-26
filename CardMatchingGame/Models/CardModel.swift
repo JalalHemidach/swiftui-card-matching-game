@@ -19,8 +19,7 @@ struct CardModel<CardContent: Equatable> {
     
     private var indexOfOneAndOnlyFaceUpCard: Int? {
         get {
-            let faceUpIndices  = cards.indices.filter { index in cards[index].isFaceUp }
-            return faceUpIndices.count == 1 ? faceUpIndices.first : nil
+            return cards.indices.filter { index in cards[index].isFaceUp }.only
         }
         set {
             cards.indices.forEach {cards[$0].isFaceUp = (newValue == $0) }
@@ -59,5 +58,11 @@ struct CardModel<CardContent: Equatable> {
         var isFaceUp: Bool = false
         var isMatched: Bool = false
         var content: CardContent
+    }
+}
+
+extension Array {
+    var only: Element? {
+        return count == 1 ? first : nil
     }
 }
